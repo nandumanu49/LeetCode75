@@ -1,25 +1,28 @@
-from typing import List
-
 class Solution:
-    def findMaxAverage(self, nums: List[int], k: int) -> float:
-        num_count = {}
+    def findMaxAverage(self, nums, k):
+        n = len(nums)
 
-        for num in nums:
-            complement = k - num
+        # Calculate the sum of the first k elements
+        current_sum = sum(nums[:k])
+        max_sum = current_sum
 
-            if complement in num_count and num_count[complement] > 0:
-                num_count[complement] -= 1
-            else:
-                num_count[num] = num_count.get(num, 0) + 1
+        # Iterate through the remaining subarrays
+        for i in range(k, n):
+            current_sum = current_sum + nums[i] - nums[i - k]
+            max_sum = max(max_sum, current_sum)
 
-        # Calculate the average of remaining values
-        remaining_values = [key for key, count in num_count.items() for _ in range(count)]
-        sum_remaining = sum(remaining_values)
-        max_avg = sum_remaining / k if k != 0 else 0  # Avoid division by zero
+        # Calculate the maximum average
+        max_avg = max_sum / k
 
         return max_avg
 
+# Example usage:
 sol = Solution()
-nums = [1, 12, -5, -6, 50, 3]
-k = 4
-print(sol.findMaxAverage(nums, k))
+nums1 = [1, 12, -5, -6, 50, 3]
+k1 = 4
+print(sol.findMaxAverage(nums1, k1))  # Output: 12.75
+
+nums2 = [5]
+k2 = 1
+print(sol.findMaxAverage(nums2, k2))  # Output: 5.0
+
